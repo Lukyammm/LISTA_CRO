@@ -1,0 +1,196 @@
+========================================================
+ABA: BASE_SCIH_NHE
+Descrição: Base primária de dados de óbitos utilizada pelo SCIH/NHE.
+Cada coluna representa um campo bruto coletado para vigilância,
+análise epidemiológica e consolidação histórica.
+========================================================
+
+A - AVALIADOR
+    Exemplo: Erisson Barbosa
+    Responsável pela avaliação/análise do óbito.
+
+B - UNIDADE DO ÓBITO
+    Exemplo: B5-Oncologia Clínica
+    Unidade hospitalar onde ocorreu o óbito.
+
+C - ESPECIALIDADE
+    Exemplo: Oncologia
+    Especialidade médica responsável pelo paciente.
+
+D - STATUS
+    Exemplo: JUSTIFICADO/ INEVITÁVEL
+    Classificação final do óbito segundo análise técnica.
+
+E - MÊS
+    Exemplo: mar.
+    Mês de ocorrência do óbito.
+
+F - ANO
+    Exemplo: 2025
+    Ano de ocorrência do óbito.
+
+G - 1ª AVALIAÇÃO CONCLUÍDA?
+    Exemplo: SIM
+    Indica se a primeira avaliação foi finalizada.
+
+H - EV ADVERSO GRAVE/ÓBITO NOTIFICADO
+    Exemplo: NÃO
+    Indica se houve notificação de evento adverso grave ou óbito.
+
+I - PRONT
+    Exemplo: 120
+    Número do prontuário do paciente.
+
+J - NOME
+    Exemplo: Glaúcia Nunes Monteiro
+    Nome completo do paciente.
+
+K - DN
+    Exemplo: 30/04/1977
+    Data de nascimento do paciente.
+
+L - IDADE
+    Exemplo: 48
+    Idade do paciente no momento do óbito.
+
+M - SEXO
+    Exemplo: F
+    Sexo biológico do paciente.
+
+N - FAIXA ETÁRIA
+    Exemplo: 40 a 49 anos
+    Classificação da idade por faixa etária.
+
+O - COMORBIDADES
+    Exemplo: (em branco)
+    Comorbidades associadas ao paciente.
+
+P - MUNICÍPIO DE ORIGEM
+    Exemplo: Fortaleza
+    Município de residência/origem do paciente.
+
+Q - UNIDADE DE ORIGEM
+    Exemplo: Hospital
+    Unidade de origem antes da internação atual.
+
+R - DATA INTERNAÇÃO
+    Exemplo: 22/03/2025
+    Data de internação hospitalar.
+
+S - DATA ÓBITO
+    Exemplo: 26/03/2025
+    Data em que ocorreu o óbito.
+
+T - HORA DO ÓBITO
+    Exemplo: 03:03
+    Horário do óbito.
+
+U - PERMANÊNCIA EM DIAS
+    Exemplo: 4
+    Tempo total de internação em dias.
+
+V - REGULAÇÃO
+    Exemplo: (em branco)
+    Informação relacionada à regulação do paciente.
+
+W - SAPS-3
+    Exemplo: (em branco)
+    Escore SAPS-3, quando aplicável.
+
+X - INFECÇÃO HOSPITALAR?
+    Exemplo: Não
+    Indica se houve infecção hospitalar.
+
+Y - SEPSE?
+    Exemplo: Não
+    Indica se houve sepse.
+
+Z - MULTI-R
+    Exemplo: Não
+    Presença de microrganismos multirresistentes.
+
+========================================================
+ABA: ANÁLISE_ÓBITOS
+Descrição: Aba analítica derivada da base, utilizada para avaliação
+qualitativa, tomada de decisão e auditorias.
+========================================================
+
+AA - ACIONADO PROTOCOLO SEPSE
+     Exemplo: Não
+     Indica se o protocolo de sepse foi acionado.
+
+AB - PROTOCOLO SEPSE SEGUIDO ADEQUADAMENTE?
+     Exemplo: (em branco)
+     Avaliação da adesão ao protocolo.
+
+AC - ÓBITO ESPERADO?
+     Exemplo: Sim
+     Indica se o óbito era clinicamente esperado.
+
+AD - PROGNÓSTICO RESERVADO?
+     Exemplo: Sim
+     Indica se o paciente apresentava prognóstico reservado.
+
+AE - CUIDADOS PALIATIVOS?
+     Exemplo: Sim
+     Indica se o paciente estava em cuidados paliativos.
+
+AF - REALIZADO REANIMAÇÃO CARDIOPULMONAR?
+     Exemplo: Sem indicação
+     Indica se houve tentativa de RCP.
+
+AG - CONCLUSÃO
+     Exemplo: JUSTIFICADO/ INEVITÁVEL
+     Conclusão final da análise do óbito.
+
+AH - OPORTUNIDADES DE MELHORIA ?
+     Exemplo: (em branco)
+     Pontos identificados para melhoria assistencial.
+
+AI - OCORRÊNCIA DE EVENTOS ADVERSOS GRAVES, MODERADOS OU QUE RESULTARAM NO ÓBITO
+     Exemplo: Não
+     Registro de eventos adversos associados.
+
+AJ - PACIENTE AGUARDA TRANSFERÊNCIA PARA ALGUMA UNIDADE
+     Exemplo: OCULTAR OU APAGAR COLUNA
+     Campo não utilizado na versão final.
+
+AK - MOTIVO DO PACIENTE SER CONSIDERADO FORA DO PERFIL ADMISSIONAL
+     Exemplo: OCULTAR OU APAGAR COLUNA
+     Campo não utilizado na versão final.
+
+AL - DIAGNÓSTICO INICIAL
+     Exemplo: Dispepsia, emagrecimento, dor abdominal, hemorragia digestiva
+     Diagnóstico na admissão.
+
+AM - DIAGNÓSTICO DEFINITIVO
+     Exemplo: Carcinoma gástrico pouco diferenciado com células em anel de sinete, invasão medular (estádio IV)
+     Diagnóstico final confirmado.
+
+AN - DIAGNÓSTICOS SECUNDÁRIOS
+     Exemplo: Hematomas em membros superiores, baixa aceitação de dieta, desnutrição, estado funcional comprometido
+     Diagnósticos associados.
+
+AO - CAUSA TERMINAL
+     Exemplo: COAGULAÇÃO INTRAVASCULAR DISSEMINADA
+     Evento terminal imediato.
+
+AP - CAUSA CONSEQUENCIAL 1
+     Exemplo: (em branco)
+     Causa intermediária 1.
+
+AQ - CAUSA CONSEQUENCIAL 2
+     Exemplo: (em branco)
+     Causa intermediária 2.
+
+AR - CAUSA BÁSICA
+     Exemplo: NEOPLASIA MALIGNA DE ESTÔMAGO
+     Doença de base que iniciou a cadeia de eventos.
+
+AS - ÓBITO NO PÓS-OPERATÓRIO
+     Exemplo: OCULTAR
+     Campo não utilizado.
+
+AT - DESFECHO DO LONDRES
+     Exemplo: (em branco)
+     Classificação do desfecho segundo protocolo de Londres.
