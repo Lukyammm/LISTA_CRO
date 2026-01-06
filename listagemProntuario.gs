@@ -139,7 +139,11 @@ function gerarListaCRO(mes, ano) {
 
   SpreadsheetApp.flush(); // 🔴 ESSENCIAL
 
-  return saida; // 🔴 preview vem daqui
+  // Garantir que o preview reflita exatamente o que foi gravado na planilha
+  // (evita retornar [] quando o retorno direto não é serializado pelo Apps Script).
+  return saida.length
+    ? lista.getRange(3, 1, saida.length, 8).getValues()
+    : []; // 🔴 preview vem daqui
 }
 
 /*********************************
