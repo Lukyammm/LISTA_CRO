@@ -194,3 +194,59 @@ AS - ÓBITO NO PÓS-OPERATÓRIO
 AT - DESFECHO DO LONDRES
      Exemplo: (em branco)
      Classificação do desfecho segundo protocolo de Londres.
+
+========================================================
+ABA: LISTA_SEPARAÇÃO_ÓBITOS
+Descrição:
+Aba de triagem e separação inicial dos óbitos.
+Funciona como lista de entrada (inbox): é aqui que os
+óbitos são registrados, organizados e encaminhados
+para avaliação, análise e consolidação nas demais abas
+do sistema.
+Os dados desta aba alimentam automaticamente outras
+planilhas e fluxos (ex: BASE_SCIH_NHE e ANÁLISE_ÓBITOS).
+========================================================
+
+A - PRONTUÁRIO
+    Exemplo: 13357
+    Número do prontuário do paciente.
+    Utilizado como identificador principal para vínculo
+    com os demais registros do sistema.
+
+B - NOME COMPLETO
+    Exemplo: Natimorto de Maria do Carmo Ferreira Martins
+    Nome completo do paciente conforme registro oficial.
+    Em casos de natimorto, pode conter identificação
+    vinculada ao nome materno.
+
+C - AVALIADOR
+    Exemplo: (em branco)
+    Profissional responsável pela avaliação do óbito.
+    Preenchido após a distribuição do caso para análise.
+
+D - UNIDADE DO ÓBITO
+    Exemplo: A7 - Clinica médica
+    Unidade hospitalar onde ocorreu o óbito.
+
+E - DATA DO ÓBITO
+    Exemplo: 02/12/2025
+    Data em que ocorreu o óbito.
+
+F - DATA DE NASCIMENTO
+    Exemplo: 02/12/2025
+    Data de nascimento do paciente.
+    Em casos de natimorto, geralmente coincide com a
+    data do óbito.
+
+G - STATUS
+    Exemplo: NÃO AVALIADO
+    Situação atual do óbito no fluxo de trabalho.
+    Indica se o caso já foi avaliado, está em análise
+    ou ainda não foi iniciado.
+
+H - OBSERVAÇÕES
+    Exemplo: (em branco)
+    Campo livre para anotações iniciais, pendências,
+    alertas ou informações relevantes antes da análise
+    detalhada.
+
