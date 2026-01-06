@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+:root{
+  --accent:#187560;
+  --bg1:#e9f1ee;
+  --bg2:#f5f6f7;
+  --glass:rgba(255,255,255,.62);
+  --stroke:rgba(255,255,255,.45);
+  --text:#1d1d1f;
+  --muted:#6e6e73;
+}
+
+*{box-sizing:border-box;font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,sans-serif;}
+body{
+  margin:0;
+  padding:26px;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  color:var(--text);
+}
+
+/* glass container */
+.shell{
+  background:var(--glass);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border:1px solid var(--stroke);
+  border-radius:24px;
+  box-shadow:0 22px 44px rgba(0,0,0,.14);
+  padding:22px 22px 18px;
+}
+
+.top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:14px;
+}
+.title{
+  font-size:20px;
+  font-weight:600;
+}
+.subtitle{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:4px;
+}
+
+/* controls */
+.controls{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:12px;
+  margin-top:14px;
+}
+
+.pillSelect{
+  position:relative;
+  background:rgba(255,255,255,.8);
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:16px;
+  padding:10px 12px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.pillLabel{
+  font-size:12px;
+  color:var(--muted);
+  width:44px;
+}
+.pillSelect select{
+  width:100%;
+  border:none;
+  outline:none;
+  background:transparent;
+  font-size:14px;
+  font-weight:500;
+  appearance:none;
+  -webkit-appearance:none;
+  padding-right:26px;
+  cursor:pointer;
+}
+.pillSelect:after{
+  content:"";
+  position:absolute;
+  right:12px;
+  width:18px;height:18px;
+  opacity:.7;
+  background:
+    radial-gradient(circle at 50% 38%, transparent 6px, transparent 0) ;
+}
+.pillSelect .chev{
+  position:absolute;
+  right:12px;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--muted);
+  pointer-events:none;
+  font-size:14px;
+}
+
+/* primary action */
+.primary{
+  margin-top:12px;
+  width:100%;
+  height:52px;
+  border:none;
+  border-radius:18px;
+  background:linear-gradient(180deg, #1d8a70, var(--accent));
+  color:#fff;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  box-shadow:0 10px 24px rgba(24,117,96,.25);
+}
+.primary:disabled{
+  opacity:.65;
+  cursor:not-allowed;
+  box-shadow:none;
+}
+
+.secondary{
+  margin-top:10px;
+  width:100%;
+  height:46px;
+  border-radius:16px;
+  border:1px solid rgba(0,0,0,.10);
+  background:rgba(255,255,255,.75);
+  color:var(--text);
+  font-weight:600;
+  cursor:pointer;
+}
+.secondary:disabled{opacity:.6;cursor:not-allowed;}
+
+/* metrics */
+.metrics{
+  margin-top:14px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+.metric{
+  background:rgba(255,255,255,.72);
+  border:1px solid rgba(0,0,0,.06);
+  border-radius:18px;
+  padding:12px 12px 10px;
+}
+.metric .k{
+  font-size:11px;
+  color:var(--muted);
+}
+.metric .v{
+  font-size:22px;
+  font-weight:600;
+  margin-top:6px;
+  letter-spacing:.2px;
+}
+
+/* table */
+.tableWrap{
+  margin-top:16px;
+  background:rgba(255,255,255,.70);
+  border:1px solid rgba(0,0,0,.06);
+  border-radius:18px;
+  overflow:hidden;
+}
+.tableHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 14px;
+  border-bottom:1px solid rgba(0,0,0,.06);
+}
+.tableHead .h{
+  font-weight:600;
+  font-size:13px;
+}
+.tableHead .hint{
+  font-size:12px;
+  color:var(--muted);
+}
+
+.tableScroll{
+  max-height:300px;
+  overflow:auto;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+}
+th,td{
+  padding:10px 12px;
+  border-bottom:1px solid rgba(0,0,0,.06);
+  vertical-align:middle;
+}
+th{
+  text-align:left;
+  color:var(--muted);
+  font-weight:600;
+  font-size:12px;
+  background:rgba(255,255,255,.6);
+  position:sticky;
+  top:0;
+  backdrop-filter: blur(10px);
+}
+td.small{color:var(--muted);font-size:12px;}
+td.status{
+  font-weight:600;
+}
+.obsCell{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.obsText{
+  flex:1;
+  min-width: 160px;
+  color:var(--text);
+  opacity:.92;
+  font-size:12px;
+}
+.iconBtn{
+  width:32px;
+  height:32px;
+  border-radius:10px;
+  border:1px solid rgba(0,0,0,.08);
+  background:rgba(255,255,255,.8);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.iconBtn:hover{background:#fff;}
+.obsInput{
+  width:100%;
+  padding:8px 10px;
+  border-radius:12px;
+  border:1px solid rgba(0,0,0,.14);
+  outline:none;
+  background:#fff;
+  font-size:12px;
+}
+.badge{
+  display:inline-flex;
+  padding:6px 10px;
+  border-radius:999px;
+  background:rgba(24,117,96,.10);
+  color:var(--accent);
+  font-weight:700;
+  font-size:11px;
+}
+
+/* loading overlay */
+#loading{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,.28);
+  z-index:99;
+}
+.loadingBox{
+  width:320px;
+  background:rgba(255,255,255,.92);
+  border-radius:22px;
+  padding:22px 22px 18px;
+  text-align:center;
+  box-shadow:0 18px 40px rgba(0,0,0,.20);
+}
+.spinner{
+  width:38px;height:38px;
+  border:3px solid rgba(0,0,0,.12);
+  border-top:3px solid var(--accent);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+  margin:0 auto 12px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loadingTxt{font-weight:600;}
+.loadingSub{font-size:12px;color:var(--muted);margin-top:6px;}
+</style>
+</head>
+
+<body>
+  <div class="shell">
+    <div class="top">
+      <div>
+        <div class="title">Separação de Óbitos • CRO</div>
+        <div class="subtitle">Gera a lista de prontuários pendentes e permite inserir observações antes do PDF.</div>
+      </div>
+      <div class="badge" id="badgeState">Pronto</div>
+    </div>
+
+    <div class="controls">
+      <div class="pillSelect">
+        <div class="pillLabel">Mês</div>
+        <select id="mes"></select>
+        <div class="chev">▾</div>
+      </div>
+
+      <div class="pillSelect">
+        <div class="pillLabel">Ano</div>
+        <select id="ano">
+          <option value="">Carregando…</option>
+        </select>
+        <div class="chev">▾</div>
+      </div>
+    </div>
+
+    <button class="primary" id="btnGerar" onclick="gerarListagem()">
+      <span id="btnText">Gerar Listagem</span>
+    </button>
+
+    <div class="metrics" id="metrics" style="display:none;">
+      <div class="metric"><div class="k">Total no período</div><div class="v" id="mTotal">0</div></div>
+      <div class="metric"><div class="k">Avaliados</div><div class="v" id="mAvaliados">0</div></div>
+      <div class="metric"><div class="k">Pendentes</div><div class="v" id="mPendentes">0</div></div>
+    </div>
+
+    <div class="tableWrap" id="wrapTable" style="display:none;">
+      <div class="tableHead">
+        <div class="h">Pré-visualização da lista</div>
+        <div class="hint">Clique no lápis para editar a observação. Salva ao sair do campo ou apertar Enter.</div>
+      </div>
+
+      <div class="tableScroll">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:90px;">Pront</th>
+              <th>Nome</th>
+              <th style="width:110px;">Óbito</th>
+              <th style="width:160px;">Status</th>
+              <th style="width:280px;">Observação</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <button class="secondary" id="btnPdf" onclick="gerarPdf()" disabled>Gerar PDF</button>
+  </div>
+
+  <div id="loading">
+    <div class="loadingBox">
+      <div class="spinner"></div>
+      <div class="loadingTxt" id="loadingTxt">Processando…</div>
+      <div class="loadingSub" id="loadingSub">Aguarde, isso pode levar alguns segundos.</div>
+    </div>
+  </div>
+
+<script>
+const mesEl = document.getElementById("mes");
+const anoEl = document.getElementById("ano");
+const btnGerar = document.getElementById("btnGerar");
+const btnPdf = document.getElementById("btnPdf");
+const badge = document.getElementById("badgeState");
+
+const meses = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+mesEl.innerHTML = meses.map((m,i)=>`<option value="${i+1}">${m}</option>`).join("");
+
+function showLoading(on, title="Processando…", sub="Aguarde, isso pode levar alguns segundos.") {
+  document.getElementById("loading").style.display = on ? "flex" : "none";
+  document.getElementById("loadingTxt").innerText = title;
+  document.getElementById("loadingSub").innerText = sub;
+}
+function setBadge(txt){
+  badge.innerText = txt;
+}
+
+google.script.run.withSuccessHandler(anos=>{
+  anoEl.innerHTML = anos.map(a=>`<option value="${a}">${a}</option>`).join("");
+}).obterAnosDisponiveisCRO();
+
+function gerarListagem(){
+  const mes = Number(mesEl.value);
+  const ano = Number(anoEl.value);
+  if (!mes || !ano) return;
+
+  btnGerar.disabled = true;
+  btnPdf.disabled = true;
+  setBadge("Gerando…");
+  showLoading(true, "Gerando listagem…", "Montando lista e calculando contadores.");
+
+  // 1) ANALISAR (CONTADORES)
+  google.script.run.withSuccessHandler(res => {
+    document.getElementById("metrics").style.display = "grid";
+    document.getElementById("mTotal").innerText = res.total;
+    document.getElementById("mAvaliados").innerText = res.avaliados;
+    document.getElementById("mPendentes").innerText = res.pendentes;
+
+    // 2) GERAR LISTA E RECEBER PREVIEW DIRETO
+    google.script.run.withSuccessHandler(dados => {
+
+      // renderiza a tabela com os dados retornados
+      renderTabela(dados);
+
+      showLoading(false);
+      btnGerar.disabled = false;
+      btnPdf.disabled = false;
+      setBadge("Pronto");
+
+    }).gerarListaCRO(mes, ano);
+
+  }).analisarObitosCRO(mes, ano);
+}
+
+
+function renderTabela(dados){
+  const wrap = document.getElementById("wrapTable");
+  const tb = document.getElementById("tbody");
+  tb.innerHTML = "";
+
+  if (!dados || !dados.length){
+    wrap.style.display = "block";
+    tb.innerHTML = `<tr><td colspan="5" class="small" style="padding:14px 12px;">Sem registros pendentes para o período.</td></tr>`;
+    return;
+  }
+
+  dados.forEach(l=>{
+    const pront = String(l[0] ?? "").trim();
+    const nome  = l[1] ?? "";
+    const data  = l[4] ?? "";
+    const status = l[6] ?? "";
+    const obs = l[7] ?? "";
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="small">${escapeHtml(pront)}</td>
+      <td>${escapeHtml(nome)}</td>
+      <td class="small">${escapeHtml(String(data))}</td>
+      <td class="status">${escapeHtml(String(status))}</td>
+      <td>
+        <div class="obsCell">
+          <div class="obsText" id="obsText_${pront}">${escapeHtml(obs || "Sem observação")}</div>
+          <button class="iconBtn" title="Editar observação" onclick="startEdit('${pront}')">
+            ${pencilSvg()}
+          </button>
+        </div>
+        <div id="obsEdit_${pront}" style="display:none;margin-top:8px;">
+          <input class="obsInput" id="obsInput_${pront}" value="${escapeAttr(obs)}" placeholder="Digite a observação…" />
+        </div>
+      </td>
+    `;
+    tb.appendChild(tr);
+  });
+
+  wrap.style.display = "block";
+}
+
+function startEdit(pront){
+  const box = document.getElementById("obsEdit_"+pront);
+  const input = document.getElementById("obsInput_"+pront);
+  box.style.display = "block";
+  input.focus();
+
+  const salvar = () => {
+    const val = (input.value || "").trim();
+    showLoading(true, "Salvando observação…", "Gravando na coluna H da lista.");
+    google.script.run.withSuccessHandler(()=>{
+      document.getElementById("obsText_"+pront).innerText = val ? val : "Sem observação";
+      box.style.display = "none";
+      showLoading(false);
+    }).salvarObservacaoCRO(pront, val);
+  };
+
+  input.onblur = salvar;
+  input.onkeydown = (e) => { if (e.key === "Enter") { e.preventDefault(); salvar(); } };
+}
+
+function gerarPdf(){
+  const mes = Number(mesEl.value);
+  const ano = Number(anoEl.value);
+  if (!mes || !ano) return;
+
+  btnPdf.disabled = true;
+  setBadge("Exportando…");
+  showLoading(true, "Gerando PDF…", "Exportando apenas A2 até a última linha preenchida.");
+
+  google.script.run.withSuccessHandler(res=>{
+    showLoading(false);
+    btnPdf.disabled = false;
+    setBadge("Pronto");
+    alert(res && res.ok ? "PDF gerado e salvo na pasta." : (res && res.msg ? res.msg : "Não foi possível gerar o PDF."));
+  }).gerarPdfCRO(mes, ano);
+}
+
+function pencilSvg(){
+  return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+    xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 20H21" stroke="rgba(29,29,31,.75)" stroke-width="2" stroke-linecap="round"/>
+    <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4 11.5-11.5Z"
+      stroke="rgba(29,29,31,.75)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+}
+
+function escapeHtml(s){
+  return String(s ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+function escapeAttr(s){ return escapeHtml(s).replaceAll("\n"," "); }
+</script>
+</body>
+</html>
