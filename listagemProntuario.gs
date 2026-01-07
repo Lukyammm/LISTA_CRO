@@ -25,10 +25,43 @@ function abrirCRO() {
  *********************************/
 function normalizarData_(v) {
   if (v instanceof Date) return v;
+  if (typeof v === "number" && Number.isFinite(v)) {
+    return new Date(Math.round((v - 25569) * 86400 * 1000));
+  }
   if (typeof v === "string") {
-    const p = v.split("/");
-    if (p.length === 3) {
-      return new Date(Number(p[2]), Number(p[1]) - 1, Number(p[0]));
+    const s = v.trim();
+    if (!s) return null;
+    const cleaned = s.split(" ")[0];
+    if (cleaned.includes("/")) {
+      const p = cleaned.split("/");
+      if (p.length === 3) {
+        const dia = Number(p[0]);
+        const mes = Number(p[1]) - 1;
+        const ano = Number(p[2]);
+        if (Number.isFinite(dia) && Number.isFinite(mes) && Number.isFinite(ano)) {
+          return new Date(ano, mes, dia);
+        }
+      }
+    }
+    if (cleaned.includes("-")) {
+      const p = cleaned.split("-");
+      if (p.length === 3) {
+        if (p[0].length === 4) {
+          const ano = Number(p[0]);
+          const mes = Number(p[1]) - 1;
+          const dia = Number(p[2]);
+          if (Number.isFinite(dia) && Number.isFinite(mes) && Number.isFinite(ano)) {
+            return new Date(ano, mes, dia);
+          }
+        } else {
+          const dia = Number(p[0]);
+          const mes = Number(p[1]) - 1;
+          const ano = Number(p[2]);
+          if (Number.isFinite(dia) && Number.isFinite(mes) && Number.isFinite(ano)) {
+            return new Date(ano, mes, dia);
+          }
+        }
+      }
     }
   }
   return null;
