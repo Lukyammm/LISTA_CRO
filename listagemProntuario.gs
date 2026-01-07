@@ -34,6 +34,9 @@ function normalizarData_(v) {
   return null;
 }
 
+// Coluna "DATA ÓBITO" na BASE_SCIH_NHE (S)
+const COL_DATA_OBITO_BASE = 18;
+
 /*********************************
  * ANOS DISPONÍVEIS (BASE col F)
  *********************************/
@@ -71,7 +74,7 @@ function analisarObitosCRO(mes, ano) {
   let pendentes = 0;
 
   base.slice(1).forEach(r => {
-    const data = normalizarData_(r[6]);
+    const data = normalizarData_(r[COL_DATA_OBITO_BASE]);
     if (!data) return;
 
     if (data.getMonth() + 1 === mes && data.getFullYear() === ano) {
@@ -113,7 +116,7 @@ function gerarListaCRO(mes, ano) {
   const saida = [];
 
   base.slice(1).forEach(r => {
-    const data = normalizarData_(r[6]);
+    const data = normalizarData_(r[COL_DATA_OBITO_BASE]);
     if (!data) return;
 
     if (data.getMonth() + 1 === mes && data.getFullYear() === ano) {
@@ -124,7 +127,7 @@ function gerarListaCRO(mes, ano) {
           r[9],   // NOME
           "",     // AVALIADOR
           r[57],  // UNIDADE
-          r[6],   // DATA ÓBITO
+          r[COL_DATA_OBITO_BASE],   // DATA ÓBITO
           r[10],  // NASC
           statusMap.get(pront) || "",
           ""
