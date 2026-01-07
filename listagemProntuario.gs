@@ -70,6 +70,25 @@ function normalizarData_(v) {
 // Coluna "DATA ÓBITO" na BASE_SCIH_NHE (S)
 const COL_DATA_OBITO_BASE = 18;
 
+function normalizarCabecalho_(valor) {
+  return String(valor || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^A-Za-z0-9]/g, "")
+    .toUpperCase();
+}
+
+function obterIndiceCabecalho_(cabecalhos, candidatos) {
+  const mapa = new Map(
+    cabecalhos.map((c, i) => [normalizarCabecalho_(c), i])
+  );
+  for (const candidato of candidatos) {
+    const idx = mapa.get(normalizarCabecalho_(candidato));
+    if (idx !== undefined) return idx;
+  }
+  return -1;
+}
+
 /*********************************
  * ANOS DISPONÍVEIS (BASE col F)
  *********************************/
@@ -90,28 +109,36 @@ function obterAnosDisponiveisCRO() {
  *********************************/
 function analisarObitosCRO(mes, ano) {
   const ss = SpreadsheetApp.getActive();
-  const base = ss.getSheetByName(CRO_CFG.ABA_BASE).getDataRange().getValues();
-  const analise = ss.getSheetByName(CRO_CFG.ABA_ANALISE).getDataRange().getValues();
+  const baseData = ss.getSheetByName(CRO_CFG.ABA_BASE).getDataRange().getValues();
+  const analiseData = ss.getSheetByName(CRO_CFG.ABA_ANALISE).getDataRange().getValues();
+
+  const baseHeaders = baseData[0] || [];
+  const analiseHeaders = analiseData[0] || [];
+
+  const idxDataObito = obterIndiceCabecalho_(baseHeaders, ["DATA ÓBITO", "DATA OBITO", "DATA DO ÓBITO", "DATA DO OBITO"]);
+  const idxProntBase = obterIndiceCabecalho_(baseHeaders, ["PRONT", "PRONTUÁRIO", "PRONTUARIO"]);
+  const idxProntAnalise = obterIndiceCabecalho_(analiseHeaders, ["PRONT", "PRONTUÁRIO", "PRONTUARIO"]);
+  const idxStatusAnalise = obterIndiceCabecalho_(analiseHeaders, ["1ª AVALIAÇÃO CONCLUÍDA?", "1A AVALIACAO CONCLUIDA", "STATUS"]);
 
   const avaliadosSet = new Set(
-    analise.slice(1)
+    analiseData.slice(1)
       .filter(r =>
-        r[6] === "SIM" ||
-        r[6] === "AGUARDA PROT. LONDRES" ||
-        r[6] === "LONDRES AVALIADO"
+        (r[idxStatusAnalise > -1 ? idxStatusAnalise : 6] === "SIM") ||
+        (r[idxStatusAnalise > -1 ? idxStatusAnalise : 6] === "AGUARDA PROT. LONDRES") ||
+        (r[idxStatusAnalise > -1 ? idxStatusAnalise : 6] === "LONDRES AVALIADO")
       )
-      .map(r => String(r[8]).trim())
+      .map(r => String(r[idxProntAnalise > -1 ? idxProntAnalise : 8]).trim())
   );
 
   let avaliados = 0;
   let pendentes = 0;
 
-  base.slice(1).forEach(r => {
-    const data = normalizarData_(r[COL_DATA_OBITO_BASE]);
+  baseData.slice(1).forEach(r => {
+    const data = normalizarData_(r[idxDataObito > -1 ? idxDataObito : COL_DATA_OBITO_BASE]);
     if (!data) return;
 
     if (data.getMonth() + 1 === mes && data.getFullYear() === ano) {
-      avaliadosSet.has(String(r[8]).trim())
+      avaliadosSet.has(String(r[idxProntBase > -1 ? idxProntBase : 8]).trim())
         ? avaliados++
         : pendentes++;
     }
@@ -129,39 +156,55 @@ function gerarListaCRO(mes, ano) {
 
   lista.getRange("A3:H").clearContent();
 
-  const base = ss.getSheetByName(CRO_CFG.ABA_BASE).getDataRange().getValues();
-  const analise = ss.getSheetByName(CRO_CFG.ABA_ANALISE).getDataRange().getValues();
+  const baseData = ss.getSheetByName(CRO_CFG.ABA_BASE).getDataRange().getValues();
+  const analiseData = ss.getSheetByName(CRO_CFG.ABA_ANALISE).getDataRange().getValues();
+
+  const baseHeaders = baseData[0] || [];
+  const analiseHeaders = analiseData[0] || [];
+
+  const idxDataObito = obterIndiceCabecalho_(baseHeaders, ["DATA ÓBITO", "DATA OBITO", "DATA DO ÓBITO", "DATA DO OBITO"]);
+  const idxProntBase = obterIndiceCabecalho_(baseHeaders, ["PRONT", "PRONTUÁRIO", "PRONTUARIO"]);
+  const idxNomeBase = obterIndiceCabecalho_(baseHeaders, ["NOME", "NOME COMPLETO"]);
+  const idxUnidadeBase = obterIndiceCabecalho_(baseHeaders, ["UNIDADE DO ÓBITO", "UNIDADE DO OBITO", "UNIDADE"]);
+  const idxNascBase = obterIndiceCabecalho_(baseHeaders, ["DN", "DATA NASCIMENTO", "DATA DE NASCIMENTO"]);
+
+  const idxProntAnalise = obterIndiceCabecalho_(analiseHeaders, ["PRONT", "PRONTUÁRIO", "PRONTUARIO"]);
+  const idxStatusAnalise = obterIndiceCabecalho_(analiseHeaders, ["1ª AVALIAÇÃO CONCLUÍDA?", "1A AVALIACAO CONCLUIDA", "STATUS"]);
+  const idxStatusLista = obterIndiceCabecalho_(analiseHeaders, ["STATUS"]);
 
   const avaliadosSet = new Set(
-    analise.slice(1)
+    analiseData.slice(1)
       .filter(r =>
-        r[6] === "SIM" ||
-        r[6] === "AGUARDA PROT. LONDRES" ||
-        r[6] === "LONDRES AVALIADO"
+        (r[idxStatusAnalise > -1 ? idxStatusAnalise : 6] === "SIM") ||
+        (r[idxStatusAnalise > -1 ? idxStatusAnalise : 6] === "AGUARDA PROT. LONDRES") ||
+        (r[idxStatusAnalise > -1 ? idxStatusAnalise : 6] === "LONDRES AVALIADO")
       )
-      .map(r => String(r[8]).trim())
+      .map(r => String(r[idxProntAnalise > -1 ? idxProntAnalise : 8]).trim())
   );
 
   const statusMap = new Map(
-    analise.slice(1).map(r => [String(r[8]).trim(), r[3]])
+    analiseData.slice(1).map(r => [
+      String(r[idxProntAnalise > -1 ? idxProntAnalise : 8]).trim(),
+      r[idxStatusLista > -1 ? idxStatusLista : 3]
+    ])
   );
 
   const saida = [];
 
-  base.slice(1).forEach(r => {
-    const data = normalizarData_(r[COL_DATA_OBITO_BASE]);
+  baseData.slice(1).forEach(r => {
+    const data = normalizarData_(r[idxDataObito > -1 ? idxDataObito : COL_DATA_OBITO_BASE]);
     if (!data) return;
 
     if (data.getMonth() + 1 === mes && data.getFullYear() === ano) {
-      const pront = String(r[8]).trim();
+      const pront = String(r[idxProntBase > -1 ? idxProntBase : 8]).trim();
       if (!avaliadosSet.has(pront)) {
         saida.push([
-          r[8],   // PRONT
-          r[9],   // NOME
+          r[idxProntBase > -1 ? idxProntBase : 8],   // PRONT
+          r[idxNomeBase > -1 ? idxNomeBase : 9],     // NOME
           "",     // AVALIADOR
-          r[57],  // UNIDADE
-          r[COL_DATA_OBITO_BASE],   // DATA ÓBITO
-          r[10],  // NASC
+          r[idxUnidadeBase > -1 ? idxUnidadeBase : 57],  // UNIDADE
+          r[idxDataObito > -1 ? idxDataObito : COL_DATA_OBITO_BASE],   // DATA ÓBITO
+          r[idxNascBase > -1 ? idxNascBase : 10],  // NASC
           statusMap.get(pront) || "",
           ""
         ]);
